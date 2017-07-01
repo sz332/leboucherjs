@@ -1,3 +1,5 @@
+//const myModule = require('./data');
+
 var GraphLibrary = (function() {
 
     var getOutNodes = function(node, nodes, edges) {
@@ -107,32 +109,34 @@ var GraphLibrary = (function() {
                 cycleRecursive(node, nodes, edges, [], result);
             });
 
-            return unique(result);
+            return unique(result).map(function(list) { list.shift(); return list; }).sort(function(a, b) { return a.length - b.length; });
         },
     };
 
 }());
 
-var nodes = [];
+// var nodes = [];
 
-nodes.push({ id: 1, name: "1" });
-nodes.push({ id: 2, name: "2" });
-nodes.push({ id: 3, name: "3" });
-nodes.push({ id: 4, name: "4" });
-nodes.push({ id: 5, name: "5" });
-nodes.push({ id: 6, name: "6" });
-nodes.push({ id: 7, name: "7" });
+// nodes.push({ id: 1, name: "1" });
+// nodes.push({ id: 2, name: "2" });
+// nodes.push({ id: 3, name: "3" });
+// nodes.push({ id: 4, name: "4" });
+// nodes.push({ id: 5, name: "5" });
+// nodes.push({ id: 6, name: "6" });
+// nodes.push({ id: 7, name: "7" });
 
-var edges = [];
+// var edges = [];
 
-edges.push({ from: 1, to: 2 });
-edges.push({ from: 2, to: 3 });
-edges.push({ from: 2, to: 5 });
-edges.push({ from: 3, to: 1 });
-edges.push({ from: 5, to: 6 });
-edges.push({ from: 5, to: 7 });
-edges.push({ from: 6, to: 3 });
+// edges.push({ from: 1, to: 2 });
+// edges.push({ from: 2, to: 3 });
+// edges.push({ from: 2, to: 5 });
+// edges.push({ from: 3, to: 1 });
+// edges.push({ from: 5, to: 6 });
+// edges.push({ from: 5, to: 7 });
+// edges.push({ from: 6, to: 3 });
 
-var result = GraphLibrary.cycles(nodes, edges);
+//var data = myModule.graphData();
 
-console.log(result);
+//var result = GraphLibrary.cycles(data.nodes, data.edges);
+
+//console.log(result);

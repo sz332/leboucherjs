@@ -303,4 +303,6 @@ function graphData() {
         edges: edges,
         lessons: lessons
     };
-};
+}
+
+//exports.graphData = graphData;

@@ -1,13 +1,69 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../shared/shared-graph.html">
 
 <dom-module id="leboucher-drills">
     <template>
     <style>
+
+table, td, th {
+	vertical-align:middle;
+}
+
+table {
+	border-collapse:separate;
+	border-spacing:0;
+	border-top:1px solid white;
+	margin-bottom:28px;
+	width:100%;
+	text-align: left;
+	font-size: 12px;
+}
+
+th{
+	border-top:5px solid #555555;
+	color: #ffffff;
+	padding:10px;
+	text-transform:uppercase;
+	background-color: #1f1f1f;
+}
+
+td{
+	padding:10px;
+}
+
+td, th{
+	border-bottom: 1px solid #1f1f1f;
+}
+     
     </style>
 
         <div id="content">
-            Here come the drills...
-        </div>
+            
+             <template is="dom-repeat" items="{{tables}}" as="table">
+
+                <h2>[[table.length]] step drills</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <template is="dom-repeat" items="{{table.header}}" as="item">        
+                                <td>[[item]]</td>
+                            </template>
+    </tr>
+    </thead>
+    <tbody>
+        <template is="dom-repeat" items="{{table.data}}" as="item">
+                        <tr>
+                            <template is="dom-repeat" items="{{item}}" as="cell">
+                                <td>[[_nodeLabel(data, cell)]]</td>
+                            </template>
+        </tr>
+        </template>
+    </tbody>
+    </table>
+    </template>
+
+    </div>
 
     </template>
 
@@ -19,11 +75,19 @@
                     type: Object,
                     value: undefined,
                     observer: "_dataChanged"
-                }
+                },
+
+                tables: Array
             },
 
             attached: function() {
 
+            },
+
+            _nodeLabel: function(data, id) {
+                return this.data.nodes.find(function(node) {
+                    return node.id === id;
+                }).label;
             },
 
             _dataChanged: function(newValue) {
@@ -32,8 +96,56 @@
                     return;
                 }
 
+                var result = GraphLibrary.cycles(this.data.nodes, this.data.edges);
 
+                var lastSize = 0;
+                var sameSizeList = [];
 
+                var list = [];
+
+                for (var i = 0; i < result.length; i++) {
+
+                    var path = result[i];
+
+                    if (lastSize == 0) {
+                        lastSize = path.length;
+                    }
+
+                    if (path.length == lastSize) {
+                        sameSizeList.push(path);
+                    } else {
+                        list.push({
+                            header: this._generateHeader(lastSize),
+                            length: lastSize,
+                            data: sameSizeList
+                        });
+
+                        sameSizeList = [];
+                        sameSizeList.push(path);
+                        lastSize = path.length;
+                    }
+                }
+
+                list.push({
+                    header: this._generateHeader(lastSize),
+                    length: lastSize,
+                    data: sameSizeList
+                });
+
+                this.tables = list;
+            },
+
+            _generateHeader: function(length) {
+
+                var data = ["A", "B", "B", "A"];
+
+                var result = [];
+
+                for (var i = 0; i < length; i++) {
+                    result.push(data[i % data.length]);
+                }
+
+                return result;
             }
         });
     </script>
