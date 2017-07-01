@@ -1,0 +1,6 @@
+cycleCalculator = function(nodes, edges) {
+
+
+
+
+}
