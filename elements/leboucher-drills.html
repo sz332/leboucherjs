@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="leboucher-drills">
+    <template>
+    <style>
+    </style>
+
+        <div id="content">
+            Here come the drills...
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'leboucher-drills',
+            properties: {
+                data: {
+                    type: Object,
+                    value: undefined,
+                    observer: "_dataChanged"
+                }
+            },
+
+            attached: function() {
+
+            },
+
+            _dataChanged: function(newValue) {
+
+                if (newValue === undefined) {
+                    return;
+                }
+
+
+
+            }
+        });
+    </script>
+
+</dom-module>

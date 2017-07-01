@@ -1,0 +1,51 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="../shared/shared-visjs.html">
+
+<link rel="import" href="../elements/leboucher-graph.html">
+<link rel="import" href="../elements/leboucher-drills.html">
+
+<script src="data.js"></script>
+
+<dom-module id="leboucher-index">
+    <template>
+    <style>
+    </style>
+
+        <paper-tabs selected="{{selected}}" attr-for-selected="name">
+            <paper-tab name="graph">Graph</paper-tab>
+            <paper-tab name="drills">Drills</paper-tab>
+        </paper-tabs>
+ 
+        <iron-pages selected="{{selected}}" attr-for-selected="name">
+            <leboucher-graph data="[[data]]" name="graph"></leboucher-graph>    
+            <leboucher-drills data="[[data]]" name="drills"></leboucher-drills>
+        </iron-pages>
+        
+    </template>
+
+    <script>
+        Polymer({
+            is: 'leboucher-index',
+            properties: {
+                data: Object,
+                selected: {
+                    type: String,
+                    value: "graph"
+                }
+            },
+
+            attached: function() {
+                this.data = graphData();
+            },
+
+            _toggleDrawer: function() {
+                this.$.drawer.toggle();
+            }
+        });
+    </script>
+
+</dom-module>

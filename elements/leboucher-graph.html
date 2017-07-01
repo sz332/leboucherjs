@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../shared/shared-visjs.html">
+
+<dom-module id="leboucher-graph">
+    <template>
+    <style>
+        #graph{
+            width: 100%;
+            height: 800px;
+            border: 1px solid lightgray;
+        }
+    </style>
+
+        <div id="graph">
+            
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'leboucher-graph',
+            properties: {
+                data: {
+                    type: Object,
+                    value: undefined,
+                    observer: "_dataChanged"
+                }
+            },
+
+            _dataChanged: function(newValue) {
+
+                if (newValue === undefined) {
+                    return;
+                }
+
+                var data = {
+                    nodes: new vis.DataSet(newValue.nodes),
+                    edges: new vis.DataSet(newValue.edges)
+                };
+
+                var options = {
+                    physics: {
+                        enabled: false
+                    },
+                    nodes: {
+                        borderWidth: 3,
+                        size: 50,
+                        color: {
+                            border: '#222222',
+                            background: '#666666'
+                        },
+                        font: {
+                            color: 'black'
+                        }
+                    },
+                    edges: {
+                        color: 'darkgray'
+                    }
+                };
+
+                var network = new vis.Network(this.$.graph, data, options);
+            }
+        });
+    </script>
+
+</dom-module>

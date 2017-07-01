@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+
+    <link rel="import" href="pages/leboucher-index.html">
+
+    <style>
+        body {
+            background-color: #dddddd;
+            margin: 0px;
+            padding: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <dom-module id="leboucher-app">
+        <template>
+
+			<leboucher-index></leboucher-index>
+
+        </template>
+
+        <script>
+            window.addEventListener('WebComponentsReady', function(e) {
+
+                Polymer({
+                    is: 'leboucher-app',
+                });
+
+            });
+        </script>
+
+    </dom-module>
+
+    <leboucher-app></leboucher-app>
+
+</body>
+
+
+</html>
