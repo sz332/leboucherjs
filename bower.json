@@ -26,11 +26,8 @@
     "paper-tabs": "^2.0.0",
     "iron-pages": "^2.0.0",
     "iron-ajax": "^2.0.2"
-<<<<<<< HEAD
   },
   "resolutions": {
     "webcomponentsjs": "^0.7.24"
-=======
->>>>>>> 5f82c0359570b44277bda9fef24b89566e4d3e1b
   }
 }
