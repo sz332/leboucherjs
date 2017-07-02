@@ -1,0 +1,340 @@
+{
+    "nodes": [{
+            "id": "headParry",
+            "label": "Head parry",
+            "image": "images/headparry-small.png",
+            "shape": "circularImage"
+        },
+        {
+            "id": "quarteParry",
+            "label": "Quarte parry",
+            "shape": "circularImage",
+            "image": "images/quarteparry-small.png"
+        },
+        {
+            "id": "tierceParry",
+            "label": "Tierce parry",
+            "shape": "circularImage",
+            "image": "images/tierceparry-small.png"
+        },
+        {
+            "id": "primeParry",
+            "label": "Prime parry",
+            "shape": "circularImage",
+            "image": "images/primeparry-small.png"
+        },
+        {
+            "id": "kidneyParry",
+            "label": "Kidney parry",
+            "shape": "circularImage",
+            "image": "images/kidneyparry-small.png"
+        },
+        {
+            "id": "flankParry",
+            "label": "Flank parry",
+            "shape": "circularImage",
+            "image": "images/flankparry-small.png"
+        },
+        {
+            "id": "outsideLegParry",
+            "label": "Outside leg parry",
+            "shape": "circularImage",
+            "image": "images/outsidelegparry-small.png"
+        },
+        {
+            "id": "insideLegParry",
+            "label": "Inside leg parry",
+            "shape": "circularImage",
+            "image": "images/insidelegparry-small.png"
+        },
+        {
+            "id": "risingParry",
+            "label": "Rising parry",
+            "shape": "circularImage",
+            "image": "images/risingparry-small.png"
+        },
+        {
+            "id": "headBlow",
+            "label": "Head blow",
+            "shape": "circularImage",
+            "image": "images/headblow-small.png"
+        },
+        {
+            "id": "insideFaceBlow",
+            "label": "Inside face blow",
+            "shape": "circularImage",
+            "image": "images/insidefaceblow-small.png"
+        },
+        {
+            "id": "insideLegBlow",
+            "label": "Inside leg blow",
+            "shape": "circularImage",
+            "image": "images/insidelegblow-small.png"
+        },
+        {
+            "id": "kidneyBlow",
+            "label": "Kidney blow",
+            "shape": "circularImage",
+            "image": "images/kidneyblow-small.png"
+        },
+        {
+            "id": "risingBlow",
+            "label": "Rising blow",
+            "shape": "circularImage",
+            "image": "images/risingblow-small.png"
+        },
+        {
+            "id": "outsideLegBlow",
+            "label": "Outside leg blow",
+            "shape": "circularImage",
+            "image": "images/outsidelegblow-small.png"
+        },
+        {
+            "id": "flankBlow",
+            "label": "Flank blow",
+            "shape": "circularImage",
+            "image": "images/flankblow-small.png"
+        },
+        {
+            "id": "faceThrust",
+            "label": "Thrust to face",
+            "shape": "circularImage",
+            "image": "images/facethrust-small.png"
+        },
+        {
+            "id": "outsideFaceBlow",
+            "label": "Outside face blow",
+            "shape": "circularImage",
+            "image": "images/outsidefaceblow-small.png"
+        }
+    ],
+    "edges": [{
+            "from": "headBlow",
+            "to": "headParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "headParry",
+            "to": "headBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "headParry",
+            "to": "insideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "headParry",
+            "to": "insideLegBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "insideFaceBlow",
+            "to": "quarteParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "quarteParry",
+            "to": "kidneyBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "quarteParry",
+            "to": "risingBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "quarteParry",
+            "to": "outsideLegBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "quarteParry",
+            "to": "outsideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "outsideFaceBlow",
+            "to": "tierceParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "tierceParry",
+            "to": "headBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "tierceParry",
+            "to": "insideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "tierceParry",
+            "to": "insideLegBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "insideFaceBlow",
+            "to": "primeParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "primeParry",
+            "to": "headBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "primeParry",
+            "to": "insideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "primeParry",
+            "to": "insideLegBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "kidneyBlow",
+            "to": "kidneyParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "kidneyParry",
+            "to": "headBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "kidneyParry",
+            "to": "insideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "kidneyParry",
+            "to": "kidneyBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "kidneyParry",
+            "to": "insideLegBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "kidneyParry",
+            "to": "flankBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "flankBlow",
+            "to": "flankParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "flankParry",
+            "to": "headBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "flankParry",
+            "to": "insideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "flankParry",
+            "to": "flankBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "flankParry",
+            "to": "outsideLegBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "outsideLegBlow",
+            "to": "outsideLegParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "outsideLegParry",
+            "to": "headBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "outsideLegParry",
+            "to": "insideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "outsideLegParry",
+            "to": "flankBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "insideLegBlow",
+            "to": "insideLegParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "insideLegParry",
+            "to": "outsideFaceBlow",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "risingBlow",
+            "to": "risingParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "risingParry",
+            "to": "faceThrust",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "faceThrust",
+            "to": "quarteParry",
+            "arrows": "to",
+            "length": 200
+        },
+        {
+            "from": "faceThrust",
+            "to": "tierceParry",
+            "arrows": "to",
+            "length": 200
+        }
+    ]
+}

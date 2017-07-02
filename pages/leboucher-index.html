@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="../shared/shared-visjs.html">
 
@@ -12,19 +13,22 @@
 
 <dom-module id="leboucher-index">
     <template>
-    <style>
-    </style>
+        <style>
+
+        </style>
+
+        <iron-ajax auto url="/data/leboucher.json" handle-as="json" last-response="{{data}}"></iron-ajax>
 
         <paper-tabs selected="{{selected}}" attr-for-selected="name">
             <paper-tab name="graph">Graph</paper-tab>
             <paper-tab name="drills">Drills</paper-tab>
         </paper-tabs>
- 
+
         <iron-pages selected="{{selected}}" attr-for-selected="name">
-            <leboucher-graph data="[[data]]" name="graph"></leboucher-graph>    
+            <leboucher-graph data="[[data]]" name="graph"></leboucher-graph>
             <leboucher-drills data="[[data]]" name="drills"></leboucher-drills>
         </iron-pages>
-        
+
     </template>
 
     <script>
@@ -39,12 +43,13 @@
             },
 
             attached: function() {
-                this.data = graphData();
+                //this.data = graphData();
             },
 
-            _toggleDrawer: function() {
-                this.$.drawer.toggle();
+            _handleResponse: function(data){
+                this.data = data;
             }
+
         });
     </script>
 
