@@ -3,67 +3,67 @@
 
 <dom-module id="leboucher-drills">
     <template>
-    <style>
+        <style>
 
-table, td, th {
-	vertical-align:middle;
-}
-
-table {
-	border-collapse:separate;
-	border-spacing:0;
-	border-top:1px solid white;
-	margin-bottom:28px;
-	width:100%;
-	text-align: left;
-	font-size: 12px;
-}
-
-th{
-	border-top:5px solid #555555;
-	color: #ffffff;
-	padding:10px;
-	text-transform:uppercase;
-	background-color: #1f1f1f;
-}
-
-td{
-	padding:10px;
-}
-
-td, th{
-	border-bottom: 1px solid #1f1f1f;
-}
-     
-    </style>
+            table, td, th {
+                vertical-align: middle;
+            }
+            
+            table {
+                border-collapse: separate;
+                border-spacing: 0;
+                border-top: 1px solid white;
+                margin-bottom: 28px;
+                width: 100%;
+                text-align: left;
+                font-size: 12px;
+            }
+            
+            th {
+                border-top: 5px solid #555555;
+                color: #ffffff;
+                padding: 10px;
+                text-transform: uppercase;
+                background-color: #1f1f1f;
+            }
+            
+            td {
+                padding: 10px;
+            }
+            
+            td,
+            th {
+                border-bottom: 1px solid #1f1f1f;
+            }
+        </style>
 
         <div id="content">
-            
-             <template is="dom-repeat" items="{{tables}}" as="table">
+
+            <template is="dom-repeat" items="{{tables}}" as="table">
 
                 <h2>[[table.length]] step drills</h2>
 
                 <table>
                     <thead>
                         <tr>
-                            <template is="dom-repeat" items="{{table.header}}" as="item">        
+                            <template is="dom-repeat" items="{{table.header}}" as="item">
                                 <td>[[item]]</td>
                             </template>
-    </tr>
-    </thead>
-    <tbody>
-        <template is="dom-repeat" items="{{table.data}}" as="item">
-                        <tr>
-                            <template is="dom-repeat" items="{{item}}" as="cell">
-                                <td>[[_nodeLabel(data, cell)]]</td>
-                            </template>
-        </tr>
-        </template>
-    </tbody>
-    </table>
-    </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template is="dom-repeat" items="{{table.data}}" as="item">
+                            <tr>
+                                <template is="dom-repeat" items="{{item}}" as="cell">
+                                    <td>[[_nodeLabel(data, cell)]]</td>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
 
-    </div>
+        </div>
 
     </template>
 
