@@ -1,11 +1,18 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+
 <link rel="import" href="../shared/shared-graph.html">
 
 <dom-module id="leboucher-drills">
     <template>
         <style>
-
-            table, td, th {
+            table,
+            td,
+            th {
                 vertical-align: middle;
             }
             
@@ -17,6 +24,7 @@
                 width: 100%;
                 text-align: left;
                 font-size: 12px;
+                font: "Robotro";
             }
             
             th {
@@ -35,32 +43,47 @@
             th {
                 border-bottom: 1px solid #1f1f1f;
             }
+            
+            .container {
+                @apply(--layout-vertical);
+                @apply(--layout-center-justified);
+            }
+            
+            paper-card {
+                --paper-card-header-background: green;
+                margin-bottom: 10px;
+            }
         </style>
 
-        <div id="content">
+        <div id="content" class="container">
 
             <template is="dom-repeat" items="{{tables}}" as="table">
 
-                <h2>[[table.length]] step drills</h2>
+                <paper-card heading="[[table.length]] step drills" image="" elevation="1" animated-shadow="false">
+                    <div class="card-content">
 
-                <table>
-                    <thead>
-                        <tr>
-                            <template is="dom-repeat" items="{{table.header}}" as="item">
-                                <td>[[item]]</td>
-                            </template>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template is="dom-repeat" items="{{table.data}}" as="item">
-                            <tr>
-                                <template is="dom-repeat" items="{{item}}" as="cell">
-                                    <td>[[_nodeLabel(data, cell)]]</td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <template is="dom-repeat" items="{{table.header}}" as="item">
+                                        <td>[[item]]</td>
+                                    </template>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template is="dom-repeat" items="{{table.data}}" as="item">
+                                    <tr>
+                                        <template is="dom-repeat" items="{{item}}" as="cell">
+                                            <td>[[_nodeLabel(data, cell)]]</td>
+                                        </template>
+                                    </tr>
                                 </template>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </paper-card>
+
             </template>
 
         </div>

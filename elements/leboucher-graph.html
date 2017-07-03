@@ -15,6 +15,8 @@
 
         </div>
 
+        <div on-tap="_buttonClick">Click me!</div>
+
     </template>
 
     <script>
@@ -34,7 +36,7 @@
                     return;
                 }
 
-                var data = {
+                this._data = {
                     nodes: new vis.DataSet(newValue.nodes),
                     edges: new vis.DataSet(newValue.edges)
                 };
@@ -59,7 +61,17 @@
                     }
                 };
 
-                var network = new vis.Network(this.$.graph, data, options);
+                this.network = new vis.Network(this.$.graph, this._data, options);
+                this.network.on("select", this._nodeSelected.bind(this));
+            },
+
+            _nodeSelected: function(params){
+                console.log('select Event:', params);
+            },
+
+            _buttonClick: function(){
+                console.log("I was pressed");
+                console.log(this.network.getPositions(this._data.nodes.map(function(e){ return e.id;})));
             }
         });
     </script>
