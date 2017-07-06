@@ -148,6 +148,41 @@ var GraphLibrary = (function() {
             });
 
             return list;
+        },
+
+        /**
+         * Returns the minial cycles which cover the whole graph
+         */
+        minialCoveringCycles: function(list, edges) {
+            var paths = [];
+
+            var _edges = clone(edges);
+
+            list.every(function(entries) {
+
+                entries.data.every(function(entry) {
+
+                    paths.push(entry);
+
+                    for (var i = 0; i < entry.length - 1; i++) {
+
+                        var source = entry[i];
+                        var target = entry[i + 1];
+
+                        _edges = _edges.filter(function(edge) { return edge.from !== source || edge.to !== target });
+                    }
+
+                    return (_edges.length !== 0);
+
+                }.bind(this));
+
+                return (_edges.length !== 0);
+            }.bind(this));
+
+            return {
+                paths: paths,
+                edges: _edges
+            };
         }
     };
 
@@ -172,6 +207,12 @@ var GraphLibrary = (function() {
 // edges.push({ from: 5, to: 6 });
 // edges.push({ from: 5, to: 7 });
 // edges.push({ from: 6, to: 3 });
+
+// var list = GraphLibrary.orderedCycles(nodes, edges);
+
+// var result2 = GraphLibrary.minialCoveringCycles(list, edges);
+
+// console.log(result2);
 
 //var data = myModule.graphData();
 
