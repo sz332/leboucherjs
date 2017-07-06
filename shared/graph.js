@@ -183,15 +183,11 @@ var GraphLibrary = (function() {
          *      if the segment is part of the graph's edges, then remove the edge
          *
          *  if at least a single edge was removed, the path is good, add it to our list
-         * 
-         * Iterate over the remaining paths from longer to shorter
-         *   if a longer path contains a shorter, remove the shorter from the list
-         * 
+
          *  Finally return the list of paths, and information about reduction:
          * 
          *  originalSize: the original number of cycles
          *  minimizedSize: the size after minimizin the list by the algorithm
-         *  deduplicatedSize: if a longer list contains a shorter list, remove the shorter list
          *  edges: remaining edges
          * 
          */
@@ -253,25 +249,6 @@ var GraphLibrary = (function() {
             // minimalize the number of paths
 
             info.minimizedSize = paths.length;
-
-            // order the paths in backwards
-            paths = paths.sort(function(a, b) { return b.length - a.length; });
-
-            // remove unnecessary ones
-            for (var i = 0; i < paths.length; i++) {
-                for (var j = paths.length - 1; j > i; j--) {
-
-                    if (includeArray(paths[i], paths[j])) {
-                        paths.splice(j, 1);
-                    }
-                }
-            }
-
-            info.deduplicatedSize = paths.length;
-            info.edges = _edges;
-
-            // reorder them back
-            paths = paths.sort(function(a, b) { return a.length - b.length; });
 
             // return the paths, and the remaining edges, if any
             return {
