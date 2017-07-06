@@ -111,6 +111,44 @@ var GraphLibrary = (function() {
 
             return unique(result).map(function(list) { list.shift(); return list; }).sort(function(a, b) { return a.length - b.length; });
         },
+
+        orderedCycles: function(nodes, edges) {
+            var result = GraphLibrary.cycles(nodes, edges);
+
+            var lastSize = 0;
+            var sameSizeList = [];
+
+            var list = [];
+
+            for (var i = 0; i < result.length; i++) {
+
+                var path = result[i];
+
+                if (lastSize == 0) {
+                    lastSize = path.length;
+                }
+
+                if (path.length == lastSize) {
+                    sameSizeList.push(path);
+                } else {
+                    list.push({
+                        length: lastSize,
+                        data: sameSizeList
+                    });
+
+                    sameSizeList = [];
+                    sameSizeList.push(path);
+                    lastSize = path.length;
+                }
+            }
+
+            list.push({
+                length: lastSize,
+                data: sameSizeList
+            });
+
+            return list;
+        }
     };
 
 }());

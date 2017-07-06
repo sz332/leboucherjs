@@ -119,43 +119,13 @@
                     return;
                 }
 
-                var result = GraphLibrary.cycles(this.data.nodes, this.data.edges);
+                var result = GraphLibrary.orderedCycles(this.data.nodes, this.data.edges);
 
-                var lastSize = 0;
-                var sameSizeList = [];
+                result.forEach(function(r) {
+                    r.header = this._generateHeader(r.length);
+                }.bind(this));
 
-                var list = [];
-
-                for (var i = 0; i < result.length; i++) {
-
-                    var path = result[i];
-
-                    if (lastSize == 0) {
-                        lastSize = path.length;
-                    }
-
-                    if (path.length == lastSize) {
-                        sameSizeList.push(path);
-                    } else {
-                        list.push({
-                            header: this._generateHeader(lastSize),
-                            length: lastSize,
-                            data: sameSizeList
-                        });
-
-                        sameSizeList = [];
-                        sameSizeList.push(path);
-                        lastSize = path.length;
-                    }
-                }
-
-                list.push({
-                    header: this._generateHeader(lastSize),
-                    length: lastSize,
-                    data: sameSizeList
-                });
-
-                this.tables = list;
+                this.tables = result;
             },
 
             _generateHeader: function(length) {
