@@ -182,9 +182,17 @@ var GraphLibrary = (function() {
          *  for each segment of the path
          *      if the segment is part of the graph's edges, then remove the edge
          *
-         *  if at least a single edge was removed, the path is usable, therefore return it in the list
+         *  if at least a single edge was removed, the path is good, add it to our list
          * 
-         *  Finally return the list of paths, and the remaining edges, if found any.
+         * Iterate over the remaining paths from longer to shorter
+         *   if a longer path contains a shorter, remove the shorter from the list
+         * 
+         *  Finally return the list of paths, and information about reduction:
+         * 
+         *  originalSize: the original number of cycles
+         *  minimizedSize: the size after minimizin the list by the algorithm
+         *  deduplicatedSize: if a longer list contains a shorter list, remove the shorter list
+         *  edges: remaining edges
          * 
          */
         minialCoveringCycles: function(list, edges) {
@@ -274,10 +282,6 @@ var GraphLibrary = (function() {
     };
 
 }());
-
-
-
-
 
 // paths = [
 //     [1, 2, 3, 4, 5],
