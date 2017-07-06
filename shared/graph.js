@@ -151,7 +151,21 @@ var GraphLibrary = (function() {
         },
 
         /**
-         * Returns the minial cycles which cover the whole graph
+         * Returns the minial list cycles which cover the graph
+         * 
+         * The algorithm does the following:
+         * 
+         * it goes through the list of cycles found by orderedCycle method from the 
+         * paths containing the smallest amount of nodes, to the largest one
+         * 
+         * for each path
+         *  for each segment of the path
+         *      if the segment is part of the graph's edges, then remove the edge
+         *
+         *  if at least a single edge was removed, the path is usable, therefore return it in the list
+         * 
+         *  Finally return the list of paths, and the remaining edges, if found any.
+         * 
          */
         minialCoveringCycles: function(list, edges) {
             var paths = [];
@@ -160,16 +174,37 @@ var GraphLibrary = (function() {
 
             list.every(function(entries) {
 
-                entries.data.every(function(entry) {
+                entries.data.every(function(path) {
 
-                    paths.push(entry);
+                    // make a clone from the old path
+                    var oldPath = clone(path);
 
-                    for (var i = 0; i < entry.length - 1; i++) {
+                    // add the first element to the end of the list so that the path will be a cycle
+                    path.push(path[0]);
 
-                        var source = entry[i];
-                        var target = entry[i + 1];
+                    // found at least an edge to be removed
+                    var removedEdge = false;
 
+                    // for every edge in the path
+                    for (var i = 0; i < path.length - 1; i++) {
+
+                        var source = path[i];
+                        var target = path[i + 1];
+
+                        var oldSize = _edge.length;
+
+                        // create a new array from the old one, removing the edge if found
                         _edges = _edges.filter(function(edge) { return edge.from !== source || edge.to !== target });
+
+                        // if the size of the edges array changed, then this path actually removed an edge, so it is an usable one
+                        if (_edge.length !== oldSize){
+                            removedEdge = true;
+                        }
+                    }
+
+                    // if the path removed at least a single edge, add it to the list
+                    if (removedEdge){
+                        paths.push(oldPath);
                     }
 
                     return (_edges.length !== 0);
@@ -179,6 +214,7 @@ var GraphLibrary = (function() {
                 return (_edges.length !== 0);
             }.bind(this));
 
+            // return the paths, and the remaining edges, if any
             return {
                 paths: paths,
                 edges: _edges
