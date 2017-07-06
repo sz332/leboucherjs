@@ -75,6 +75,26 @@ var GraphLibrary = (function() {
         return false;
     };
 
+    var includeArray = function(source, target) {
+
+        for (var i = 0; i < source.length; i++) {
+
+            var found = true;
+
+            for (var j = 0; j < target.length; j++) {
+                if (source[i + j] != target[j]) {
+                    found = false;
+                }
+            }
+
+            if (found) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     var unique = function(list) {
 
         var result = [];
@@ -170,6 +190,14 @@ var GraphLibrary = (function() {
         minialCoveringCycles: function(list, edges) {
             var paths = [];
 
+            var info = {
+                originalSize : 0
+            }
+
+            for (var i = 0; i < list.length; i++){
+                info.originalSize += list[i].data.length;
+            }
+
             var _edges = clone(edges);
 
             list.every(function(entries) {
@@ -191,19 +219,19 @@ var GraphLibrary = (function() {
                         var source = path[i];
                         var target = path[i + 1];
 
-                        var oldSize = _edge.length;
+                        var oldSize = _edges.length;
 
                         // create a new array from the old one, removing the edge if found
                         _edges = _edges.filter(function(edge) { return edge.from !== source || edge.to !== target });
 
                         // if the size of the edges array changed, then this path actually removed an edge, so it is an usable one
-                        if (_edge.length !== oldSize){
+                        if (_edges.length !== oldSize) {
                             removedEdge = true;
                         }
                     }
 
                     // if the path removed at least a single edge, add it to the list
-                    if (removedEdge){
+                    if (removedEdge) {
                         paths.push(oldPath);
                     }
 
@@ -214,15 +242,59 @@ var GraphLibrary = (function() {
                 return (_edges.length !== 0);
             }.bind(this));
 
+            // minimalize the number of paths
+
+            info.minimizedSize = paths.length;
+
+            // order the paths in backwards
+            paths = paths.sort(function(a, b) { return b.length - a.length; });
+
+            // remove unnecessary ones
+            for (var i = 0; i < paths.length; i++) {
+                for (var j = paths.length - 1; j > i; j--) {
+
+                    if (includeArray(paths[i], paths[j])) {
+                        paths.splice(j, 1);
+                    }
+                }
+            }
+
+            info.deduplicatedSize = paths.length;
+            info.edges = _edges;
+
+            // reorder them back
+            paths = paths.sort(function(a, b) { return a.length - b.length; });
+
             // return the paths, and the remaining edges, if any
             return {
                 paths: paths,
-                edges: _edges
+                info: info
             };
         }
     };
 
 }());
+
+
+
+
+
+// paths = [
+//     [1, 2, 3, 4, 5],
+//     [2, 3, 4],
+//     [1, 2]
+// ];
+
+// for (var i = 0; i < paths.length; i++) {
+//     for (var j = paths.length - 1; j > i; j--) {
+
+//         if (includeArray(paths[i], paths[j])) {
+//             paths.splice(j, 1);
+//         }
+//     }
+// }
+
+// console.log(paths);
 
 // var nodes = [];
 
