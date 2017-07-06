@@ -202,9 +202,10 @@ var GraphLibrary = (function() {
                 info.originalSize += list[i].data.length;
             }
 
+            var _list = clone(list);
             var _edges = clone(edges);
 
-            list.every(function(entries) {
+            _list.every(function(entries) {
 
                 entries.data.every(function(path) {
 
