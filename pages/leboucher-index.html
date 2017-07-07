@@ -56,6 +56,13 @@
             },
 
             _url: function(url){
+
+                var context = this._applicationContextPath();
+
+                if (!context.endsWith("/")){
+                    context += "/";
+                }
+
                 return this._applicationContextPath() + url;
             }
 
