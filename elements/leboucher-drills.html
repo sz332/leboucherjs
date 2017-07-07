@@ -3,7 +3,10 @@
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html" />
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
+
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html" >
 
 <link rel="import" href="../shared/shared-graph.html">
 
@@ -53,39 +56,55 @@
                 --paper-card-header-background: green;
                 margin-bottom: 10px;
             }
+
+            .toolbar{
+                background-color: #555555;
+            }
+
+            .toolbar paper-icon-button{
+                color: white;
+            }
+
         </style>
 
-        <div id="content" class="container">
 
-            <template is="dom-repeat" items="{{tables}}" as="table">
+        <div>
+            <div class="toolbar">
+                <paper-icon-button icon="chrome-reader-mode" on-tap="_onFilterButtonClick"></paper-icon-button>
+            </div>
 
-                <paper-card heading="[[table.length]] step drills" image="" elevation="1" animated-shadow="false">
-                    <div class="card-content">
+            <div class="container">
 
-                        <table>
-                            <thead>
-                                <tr>
-                                    <template is="dom-repeat" items="{{table.header}}" as="item">
-                                        <td>[[item]]</td>
-                                    </template>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template is="dom-repeat" items="{{table.data}}" as="item">
+                <template is="dom-repeat" items="{{_filterState(filterState, tables, filteredTables)}}" as="table">
+
+                    <paper-card heading="[[table.length]] step drills" image="" elevation="1" animated-shadow="false">
+                        <div class="card-content">
+
+                            <table>
+                                <thead>
                                     <tr>
-                                        <template is="dom-repeat" items="{{item}}" as="cell">
-                                            <td>[[_nodeLabel(data, cell)]]</td>
+                                        <template is="dom-repeat" items="{{table.header}}" as="item">
+                                            <td>[[item]]</td>
                                         </template>
                                     </tr>
-                                </template>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <template is="dom-repeat" items="{{table.data}}" as="item">
+                                        <tr>
+                                            <template is="dom-repeat" items="{{item}}" as="cell">
+                                                <td>[[_nodeLabel(data, cell)]]</td>
+                                            </template>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
 
-                    </div>
-                </paper-card>
+                        </div>
+                    </paper-card>
 
-            </template>
+                </template>
 
+            </div>
         </div>
 
     </template>
@@ -100,11 +119,44 @@
                     observer: "_dataChanged"
                 },
 
-                tables: Array
+                tables: {
+                    type: Array,
+                    value: function(){
+                        return [];
+                    }                    
+                },
+
+                filteredTables: {
+                    type: Array,
+                    value: function(){
+                        return [];
+                    }
+                },
+
+                filterState:{
+                    type: String,
+                    value: "table"
+                }
             },
 
             attached: function() {
 
+            },
+
+            _onFilterButtonClick: function(){
+                if (this.filterState === "table"){
+                    this.filterState = "filtered";
+                } else {
+                    this.filterState = "table";
+                }
+            },
+
+            _filterState: function(filterState, tables, filteredTables){
+                if ("table" === filterState){
+                    return tables;
+                } else {
+                    return filteredTables;
+                }
             },
 
             _nodeLabel: function(data, id) {
@@ -128,7 +180,12 @@
                 this.tables = result;
 
                 var minimalCycles = GraphLibrary.minialCoveringCycles(result, this.data.edges);
-                console.log(minimalCycles);
+
+                minimalCycles.paths.forEach(function(r) {
+                    r.header = this._generateHeader(r.length);
+                }.bind(this));
+
+                this.filteredTables = minimalCycles.paths;
             },
 
             _generateHeader: function(length) {

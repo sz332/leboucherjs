@@ -120,29 +120,16 @@ var GraphLibrary = (function() {
         return result;
     };
 
-    return {
-        cycles: function(nodes, edges) {
-
-            var result = [];
-
-            nodes.forEach(function(node) {
-                cycleRecursive(node, nodes, edges, [], result);
-            });
-
-            return unique(result).map(function(list) { list.shift(); return list; }).sort(function(a, b) { return a.length - b.length; });
-        },
-
-        orderedCycles: function(nodes, edges) {
-            var result = GraphLibrary.cycles(nodes, edges);
+    var groupPaths = function(pathList){
 
             var lastSize = 0;
             var sameSizeList = [];
 
             var list = [];
 
-            for (var i = 0; i < result.length; i++) {
+            for (var i = 0; i < pathList.length; i++) {
 
-                var path = result[i];
+                var path = pathList[i];
 
                 if (lastSize == 0) {
                     lastSize = path.length;
@@ -168,6 +155,24 @@ var GraphLibrary = (function() {
             });
 
             return list;
+    };
+
+
+    return {
+        cycles: function(nodes, edges) {
+
+            var result = [];
+
+            nodes.forEach(function(node) {
+                cycleRecursive(node, nodes, edges, [], result);
+            });
+
+            return unique(result).map(function(list) { list.shift(); return list; }).sort(function(a, b) { return a.length - b.length; });
+        },
+
+        orderedCycles: function(nodes, edges) {
+            var pathList = GraphLibrary.cycles(nodes, edges);
+            return groupPaths(pathList);
         },
 
         /**
@@ -253,7 +258,7 @@ var GraphLibrary = (function() {
 
             // return the paths, and the remaining edges, if any
             return {
-                paths: paths,
+                paths: groupPaths(paths),
                 info: info
             };
         }
