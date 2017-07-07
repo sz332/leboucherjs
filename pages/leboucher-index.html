@@ -17,7 +17,7 @@
 
         </style>
 
-        <iron-ajax auto url="/data/leboucher.json" handle-as="json" last-response="{{data}}"></iron-ajax>
+        <iron-ajax auto url="{{_url('data/leboucher.json')}}" handle-as="json" last-response="{{data}}"></iron-ajax>
 
         <paper-tabs selected="{{selected}}" attr-for-selected="name">
             <paper-tab name="graph">Graph</paper-tab>
@@ -40,6 +40,23 @@
                     type: String,
                     value: "graph"
                 }
+            },
+
+            _applicationContextPath: function() {
+
+                if ("/" === location.pathname){
+                    return "/";
+                }
+
+                if (location.pathname.split('/').length > 1){
+                    return "/" + location.pathname.split('/')[1];
+                }
+
+                return "/";
+            },
+
+            _url: function(url){
+                return this._applicationContextPath() + url;
             }
 
         });
