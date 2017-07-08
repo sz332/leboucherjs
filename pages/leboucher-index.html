@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="../shared/shared-visjs.html">
+<link rel="import" href="../shared/shared-common.html">
 
 <link rel="import" href="../elements/leboucher-graph.html">
 <link rel="import" href="../elements/leboucher-drills.html">
@@ -34,38 +35,15 @@
     <script>
         Polymer({
             is: 'leboucher-index',
+            behaviors: [CommonBehavior],
             properties: {
                 data: Object,
                 selected: {
                     type: String,
                     value: "graph"
                 }
-            },
-
-            _applicationContextPath: function() {
-
-                if ("/" === location.pathname){
-                    return "/";
-                }
-
-                if (location.pathname.split('/').length > 1){
-                    return "/" + location.pathname.split('/')[1];
-                }
-
-                return "/";
-            },
-
-            _url: function(url){
-
-                var context = this._applicationContextPath();
-
-                if (!context.endsWith("/")){
-                    context += "/";
-                }
-
-                return context + url;
             }
-
+        
         });
     </script>
 
