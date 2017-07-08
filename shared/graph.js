@@ -120,41 +120,43 @@ var GraphLibrary = (function() {
         return result;
     };
 
-    var groupPaths = function(pathList){
+    var groupPaths = function(pathList) {
 
-            var lastSize = 0;
-            var sameSizeList = [];
+        var lastSize = 0;
+        var sameSizeList = [];
 
-            var list = [];
+        var list = [];
 
-            for (var i = 0; i < pathList.length; i++) {
+        for (var i = 0; i < pathList.length; i++) {
 
-                var path = pathList[i];
+            var path = pathList[i];
 
-                if (lastSize == 0) {
-                    lastSize = path.length;
-                }
-
-                if (path.length == lastSize) {
-                    sameSizeList.push(path);
-                } else {
-                    list.push({
-                        length: lastSize,
-                        data: sameSizeList
-                    });
-
-                    sameSizeList = [];
-                    sameSizeList.push(path);
-                    lastSize = path.length;
-                }
+            if (lastSize == 0) {
+                lastSize = path.length;
             }
 
+            if (path.length == lastSize) {
+                sameSizeList.push(path);
+            } else {
+                list.push({
+                    length: lastSize,
+                    data: sameSizeList
+                });
+
+                sameSizeList = [];
+                sameSizeList.push(path);
+                lastSize = path.length;
+            }
+        }
+
+        if (lastSize !== 0) {
             list.push({
                 length: lastSize,
                 data: sameSizeList
             });
+        }
 
-            return list;
+        return list;
     };
 
 
@@ -200,10 +202,10 @@ var GraphLibrary = (function() {
             var paths = [];
 
             var info = {
-                originalSize : 0
+                originalSize: 0
             }
 
-            for (var i = 0; i < list.length; i++){
+            for (var i = 0; i < list.length; i++) {
                 info.originalSize += list[i].data.length;
             }
 
