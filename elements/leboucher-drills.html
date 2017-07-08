@@ -65,6 +65,10 @@
                 color: white;
             }
 
+            div.image img{
+                height: 100px;
+            }
+
         </style>
 
 
@@ -92,7 +96,12 @@
                                     <template is="dom-repeat" items="{{table.data}}" as="item">
                                         <tr>
                                             <template is="dom-repeat" items="{{item}}" as="cell">
-                                                <td>[[_nodeLabel(data, cell)]]</td>
+                                                <td>
+
+                                                    <div class="image"><img src="[[_nodeImage(data, cell)]]"></div>
+                                                    <div class="label">[[_nodeLabel(data, cell)]]</div>
+
+                                                </td>
                                             </template>
                                         </tr>
                                     </template>
@@ -163,6 +172,12 @@
                 return this.data.nodes.find(function(node) {
                     return node.id === id;
                 }).label;
+            },
+
+            _nodeImage: function(data, id) {
+                return this.data.nodes.find(function(node) {
+                    return node.id === id;
+                }).image;
             },
 
             _dataChanged: function(newValue) {

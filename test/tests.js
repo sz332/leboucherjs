@@ -144,3 +144,34 @@ QUnit.test("Test multipoint cycle ordered", function(assert) {
     assert.equal(result[0].data[0].indexOf(3) !== -1, true, "3 found in path");
 
 }.bind(this));
+
+QUnit.test("Test multipoint cycle ordered", function(assert) {
+
+    var nodes = [];
+
+    nodes.push({ id: 1, name: "1" });
+    nodes.push({ id: 2, name: "2" });
+    nodes.push({ id: 3, name: "3" });
+    nodes.push({ id: 4, name: "4" });
+
+    var edges = [];
+
+    edges.push({ from: 1, to: 2 });
+    edges.push({ from: 2, to: 3 });
+    edges.push({ from: 2, to: 4 });
+    edges.push({ from: 3, to: 1 });
+    edges.push({ from: 4, to: 1 });
+
+    var result = GraphLibrary.orderedCycles(nodes, edges);
+
+    assert.equal(result[0].length, 3, "Path contains 3 nodes");
+
+    assert.equal(result[0].data[0].indexOf(1) !== -1, true, "1 found in path");
+    assert.equal(result[0].data[0].indexOf(2) !== -1, true, "2 found in path");
+    assert.equal(result[0].data[0].indexOf(3) !== -1, true, "3 found in path");
+
+    assert.equal(result[0].data[1].indexOf(1) !== -1, true, "1 found in path");
+    assert.equal(result[0].data[1].indexOf(2) !== -1, true, "2 found in path");
+    assert.equal(result[0].data[1].indexOf(4) !== -1, true, "3 found in path");
+
+}.bind(this));
