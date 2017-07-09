@@ -175,3 +175,4 @@ QUnit.test("Test multipoint cycle ordered", function(assert) {
     assert.equal(result[0].data[1].indexOf(4) !== -1, true, "3 found in path");
 
 }.bind(this));
+
