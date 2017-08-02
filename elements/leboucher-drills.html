@@ -6,7 +6,7 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html" >
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="../shared/shared-graph.html">
 <link rel="import" href="../shared/shared-jspdf.html">
@@ -57,19 +57,18 @@
                 --paper-card-header-background: green;
                 margin-bottom: 10px;
             }
-
-            .toolbar{
+            
+            .toolbar {
                 background-color: #555555;
             }
-
-            .toolbar paper-icon-button{
+            
+            .toolbar paper-icon-button {
                 color: white;
             }
-
-            div.image img{
+            
+            div.image img {
                 height: 100px;
             }
-
         </style>
 
 
@@ -100,7 +99,9 @@
                                             <template is="dom-repeat" items="{{item}}" as="cell">
                                                 <td>
 
-                                                    <div class="image"><img src="[[_nodeImage(data, cell)]]"></div>
+                                                    <div class="image">
+                                                        <img src="[[_nodeImage(data, cell)]]">
+                                                    </div>
                                                     <div class="label">[[_nodeLabel(data, cell)]]</div>
 
                                                 </td>
@@ -132,19 +133,19 @@
 
                 tables: {
                     type: Array,
-                    value: function(){
-                        return [];
-                    }                    
-                },
-
-                filteredTables: {
-                    type: Array,
-                    value: function(){
+                    value: function() {
                         return [];
                     }
                 },
 
-                filterState:{
+                filteredTables: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    }
+                },
+
+                filterState: {
                     type: String,
                     value: "table"
                 }
@@ -154,16 +155,16 @@
 
             },
 
-            _onFilterButtonClick: function(){
-                if (this.filterState === "table"){
+            _onFilterButtonClick: function() {
+                if (this.filterState === "table") {
                     this.filterState = "filtered";
                 } else {
                     this.filterState = "table";
                 }
             },
 
-            _filterState: function(filterState, tables, filteredTables){
-                if ("table" === filterState){
+            _filterState: function(filterState, tables, filteredTables) {
+                if ("table" === filterState) {
                     return tables;
                 } else {
                     return filteredTables;
@@ -218,11 +219,123 @@
                 return result;
             },
 
-            _onSave: function(){
-                var doc = new jsPDF();
-                doc.text('Hello world!', 10, 10);
-                doc.save('a4.pdf');
+            _onSave: function() {
+
+                this._loadImages(
+                    function() {
+                        var doc = new jsPDF();
+
+                        //var pageHeight = Math.trunc(doc.internal.pageSize.height);
+
+                        var table = this._filterState(this.filterState, this.tables, this.filteredTables);
+
+                        table.forEach(function(drill) {
+
+                            var y = 20;
+
+                            y = this._addPDFHeader(doc, y, drill.length + " step drill");
+                            y = this._addPDFTable(doc, y, drill.header, drill.data);
+
+                            doc.addPage();
+                        }, this);
+
+                        //doc.save('a4.pdf');
+
+                    }.bind(this)
+                );
+
+            },
+
+            _loadImages: function(finishedFunction) {
+                this.data.nodes.forEach(function(node) {
+
+                    this._getBase64Image(node.image, function(dataUrl) {
+                        node.base64 = dataUrl;
+
+                        var emptyItem = this.data.nodes.find(function(e) {
+                            return e.base64 === undefined;
+                        });
+
+                        if (emptyItem === undefined) {
+                            finishedFunction();
+                        }
+
+                    }.bind(this));
+
+                }, this);
+            },
+
+            _addPDFHeader: function(doc, y, text) {
+                doc.setFontSize(20);
+                doc.text(text, 0, y);
+                return y + 10;
+            },
+
+            _getColumnWidth: function(doc, columnCount) {
+                var pageWidth = Math.trunc(doc.internal.pageSize.width);
+                return pageWidth / columnCount;
+            },
+
+            _addPDFTable: function(doc, y, header, rows) {
+                var columnWidth = this._getColumnWidth(doc, header.length);
+
+                var y = this._addPDFTableHeader(doc, y, header, columnWidth);
+                y = this._addPDFTableBody(doc, y, rows, columnWidth);
+                return y;
+            },
+
+            _addPDFTableHeader: function(doc, y, header, columnWidth) {
+
+                var x = columnWidth / 2;
+
+                doc.setFontSize(10);
+
+                for (var i = 0; i < header.length; i++) {
+                    doc.text(header[i], x, y);
+                    x += columnWidth;
+                }
+
+                return y + 10;
+            },
+
+            _addPDFTableBody: function(doc, y, rows, columnWidth) {
+
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+
+                    for (var j = 0; j < row.length; j++) {
+                        var technique = row[j];
+
+                        var name = this._nodeLabel(this.data, technique);
+                        var url = this._nodeImage(this.data, technique);
+
+                        console.log(name + " -> " + url);
+                    }
+                }
+
+                return y;
+            },
+
+            _getBase64Image: function(url, fn) {
+                var img = new Image();
+                var dataURL;
+
+                img.src = url;
+
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    var context = canvas.getContext('2d');
+                    context.drawImage(img, 0, 0);
+
+                    dataURL = canvas.toDataURL('image/jpeg');
+
+                    fn(dataURL);
+                }
             }
+
         });
     </script>
 
