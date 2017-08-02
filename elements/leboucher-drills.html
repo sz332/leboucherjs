@@ -183,7 +183,7 @@
                 }).image;
             },
 
-            _nodeImageData: function(data, id){
+            _nodeImageData: function(data, id) {
                 return this.data.nodes.find(function(node) {
                     return node.id === id;
                 }).base64;
@@ -245,7 +245,7 @@
                             doc.addPage();
                         }, this);
 
-                        //doc.save('a4.pdf');
+                        doc.save('a4.pdf');
 
                     }.bind(this)
                 );
@@ -315,9 +315,10 @@
                         var name = this._nodeLabel(this.data, technique);
                         var image = this._nodeImageData(this.data, technique);
 
-                        doc.addImage(image, 'png', j * columnWidth, y, columnWidth , 40);
-                        y += 40;
+                        doc.addImage(image, 'jpeg', j * columnWidth, y, columnWidth, 40);
                     }
+
+                    y += 40;
                 }
 
                 return y;
@@ -336,6 +337,23 @@
 
                     var context = canvas.getContext('2d');
                     context.drawImage(img, 0, 0);
+
+                    // the following code is needed to convert transparent background to white
+
+                    var imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    
+                    var data = imgData.data;
+                    
+                    for (var i = 0; i < data.length; i += 4) {
+                        if (data[i + 3] < 255) {
+                            data[i] = 255;
+                            data[i + 1] = 255;
+                            data[i + 2] = 255;
+                            data[i + 3] = 255;
+                        }
+                    }
+
+                    context.putImageData(imgData, 0, 0);
 
                     dataURL = canvas.toDataURL('image/jpeg');
 
