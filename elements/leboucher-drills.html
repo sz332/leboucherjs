@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html" >
 
 <link rel="import" href="../shared/shared-graph.html">
+<link rel="import" href="../shared/shared-jspdf.html">
 
 <dom-module id="leboucher-drills">
     <template>
@@ -75,6 +76,7 @@
         <div>
             <div class="toolbar">
                 <paper-icon-button icon="chrome-reader-mode" on-tap="_onFilterButtonClick"></paper-icon-button>
+                <paper-icon-button icon="save" on-tap="_onSave"></paper-icon-button>
             </div>
 
             <div class="container">
@@ -214,6 +216,12 @@
                 }
 
                 return result;
+            },
+
+            _onSave: function(){
+                var doc = new jsPDF();
+                doc.text('Hello world!', 10, 10);
+                doc.save('a4.pdf');
             }
         });
     </script>
