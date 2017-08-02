@@ -183,6 +183,12 @@
                 }).image;
             },
 
+            _nodeImageData: function(data, id){
+                return this.data.nodes.find(function(node) {
+                    return node.id === id;
+                }).base64;
+            },
+
             _dataChanged: function(newValue) {
 
                 if (newValue === undefined) {
@@ -307,9 +313,10 @@
                         var technique = row[j];
 
                         var name = this._nodeLabel(this.data, technique);
-                        var url = this._nodeImage(this.data, technique);
+                        var image = this._nodeImageData(this.data, technique);
 
-                        console.log(name + " -> " + url);
+                        doc.addImage(image, 'png', j * columnWidth, y, columnWidth , 40);
+                        y += 40;
                     }
                 }
 
