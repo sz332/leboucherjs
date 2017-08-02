@@ -1,0 +1,30 @@
+<script>
+    CommonBehavior = {
+
+            _applicationContextPath: function() {
+
+                if ("/" === location.pathname){
+                    return "/";
+                }
+
+                if (location.pathname.split('/').length > 1){
+                    return "/" + location.pathname.split('/')[1];
+                }
+
+                return "/";
+            },
+
+            _url: function(url){
+
+                var context = this._applicationContextPath();
+
+                if (!context.endsWith("/")){
+                    context += "/";
+                }
+
+                return context + url;
+            }
+
+
+    };
+</script>

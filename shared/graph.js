@@ -75,6 +75,26 @@ var GraphLibrary = (function() {
         return false;
     };
 
+    var includeArray = function(source, target) {
+
+        for (var i = 0; i < source.length; i++) {
+
+            var found = true;
+
+            for (var j = 0; j < target.length; j++) {
+                if (source[i + j] != target[j]) {
+                    found = false;
+                }
+            }
+
+            if (found) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     var unique = function(list) {
 
         var result = [];
@@ -100,6 +120,46 @@ var GraphLibrary = (function() {
         return result;
     };
 
+    var groupPaths = function(pathList) {
+
+        var lastSize = 0;
+        var sameSizeList = [];
+
+        var list = [];
+
+        for (var i = 0; i < pathList.length; i++) {
+
+            var path = pathList[i];
+
+            if (lastSize == 0) {
+                lastSize = path.length;
+            }
+
+            if (path.length == lastSize) {
+                sameSizeList.push(path);
+            } else {
+                list.push({
+                    length: lastSize,
+                    data: sameSizeList
+                });
+
+                sameSizeList = [];
+                sameSizeList.push(path);
+                lastSize = path.length;
+            }
+        }
+
+        if (lastSize !== 0) {
+            list.push({
+                length: lastSize,
+                data: sameSizeList
+            });
+        }
+
+        return list;
+    };
+
+
     return {
         cycles: function(nodes, edges) {
 
@@ -111,32 +171,99 @@ var GraphLibrary = (function() {
 
             return unique(result).map(function(list) { list.shift(); return list; }).sort(function(a, b) { return a.length - b.length; });
         },
+
+        orderedCycles: function(nodes, edges) {
+            var pathList = GraphLibrary.cycles(nodes, edges);
+            return groupPaths(pathList);
+        },
+
+        /**
+         * Returns the minial list cycles which cover the graph
+         * 
+         * The algorithm does the following:
+         * 
+         * it goes through the list of cycles found by orderedCycle method from the 
+         * paths containing the smallest amount of nodes, to the largest one
+         * 
+         * for each path
+         *  for each segment of the path
+         *      if the segment is part of the graph's edges, then remove the edge
+         *
+         *  if at least a single edge was removed, the path is good, add it to our list
+
+         *  Finally return the list of paths, and information about reduction:
+         * 
+         *  originalSize: the original number of cycles
+         *  minimizedSize: the size after minimizin the list by the algorithm
+         *  edges: remaining edges
+         * 
+         */
+        minialCoveringCycles: function(list, edges) {
+            var paths = [];
+
+            var info = {
+                originalSize: 0
+            }
+
+            for (var i = 0; i < list.length; i++) {
+                info.originalSize += list[i].data.length;
+            }
+
+            var _list = clone(list);
+            var _edges = clone(edges);
+
+            _list.every(function(entries) {
+
+                entries.data.every(function(path) {
+
+                    // make a clone from the old path
+                    var oldPath = clone(path);
+
+                    // add the first element to the end of the list so that the path will be a cycle
+                    path.push(path[0]);
+
+                    // found at least an edge to be removed
+                    var removedEdge = false;
+
+                    // for every edge in the path
+                    for (var i = 0; i < path.length - 1; i++) {
+
+                        var source = path[i];
+                        var target = path[i + 1];
+
+                        var oldSize = _edges.length;
+
+                        // create a new array from the old one, removing the edge if found
+                        _edges = _edges.filter(function(edge) { return edge.from !== source || edge.to !== target });
+
+                        // if the size of the edges array changed, then this path actually removed an edge, so it is an usable one
+                        if (_edges.length !== oldSize) {
+                            removedEdge = true;
+                        }
+                    }
+
+                    // if the path removed at least a single edge, add it to the list
+                    if (removedEdge) {
+                        paths.push(oldPath);
+                    }
+
+                    return (_edges.length !== 0);
+
+                }.bind(this));
+
+                return (_edges.length !== 0);
+            }.bind(this));
+
+            // minimalize the number of paths
+
+            info.minimizedSize = paths.length;
+
+            // return the paths, and the remaining edges, if any
+            return {
+                paths: groupPaths(paths),
+                info: info
+            };
+        }
     };
 
 }());
-
-// var nodes = [];
-
-// nodes.push({ id: 1, name: "1" });
-// nodes.push({ id: 2, name: "2" });
-// nodes.push({ id: 3, name: "3" });
-// nodes.push({ id: 4, name: "4" });
-// nodes.push({ id: 5, name: "5" });
-// nodes.push({ id: 6, name: "6" });
-// nodes.push({ id: 7, name: "7" });
-
-// var edges = [];
-
-// edges.push({ from: 1, to: 2 });
-// edges.push({ from: 2, to: 3 });
-// edges.push({ from: 2, to: 5 });
-// edges.push({ from: 3, to: 1 });
-// edges.push({ from: 5, to: 6 });
-// edges.push({ from: 5, to: 7 });
-// edges.push({ from: 6, to: 3 });
-
-//var data = myModule.graphData();
-
-//var result = GraphLibrary.cycles(data.nodes, data.edges);
-
-//console.log(result);

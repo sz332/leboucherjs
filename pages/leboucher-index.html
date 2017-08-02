@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="../shared/shared-visjs.html">
+<link rel="import" href="../shared/shared-common.html">
 
 <link rel="import" href="../elements/leboucher-graph.html">
 <link rel="import" href="../elements/leboucher-drills.html">
@@ -17,7 +18,7 @@
 
         </style>
 
-        <iron-ajax auto url="/data/leboucher.json" handle-as="json" last-response="{{data}}"></iron-ajax>
+        <iron-ajax auto url="{{_url('data/leboucher.json')}}" handle-as="json" last-response="{{data}}"></iron-ajax>
 
         <paper-tabs selected="{{selected}}" attr-for-selected="name">
             <paper-tab name="graph">Graph</paper-tab>
@@ -34,6 +35,7 @@
     <script>
         Polymer({
             is: 'leboucher-index',
+            behaviors: [CommonBehavior],
             properties: {
                 data: Object,
                 selected: {
@@ -41,7 +43,7 @@
                     value: "graph"
                 }
             }
-
+        
         });
     </script>
 

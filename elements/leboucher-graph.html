@@ -36,6 +36,11 @@
                     return;
                 }
 
+                newValue.edges.forEach(function(element) {
+                    element.arrows = "to";
+                    element.length = 200;
+                }, this);
+
                 this._data = {
                     nodes: new vis.DataSet(newValue.nodes),
                     edges: new vis.DataSet(newValue.edges)
