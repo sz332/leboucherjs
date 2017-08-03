@@ -184,9 +184,15 @@
             },
 
             _nodeImageData: function(data, id) {
-                return this.data.nodes.find(function(node) {
+                var node = this.data.nodes.find(function(node) {
                     return node.id === id;
-                }).base64;
+                });
+
+                return {
+                    base64: node.base64,
+                    width: node.width,
+                    height: node.height
+                };
             },
 
             _dataChanged: function(newValue) {
@@ -255,8 +261,10 @@
             _loadImages: function(finishedFunction) {
                 this.data.nodes.forEach(function(node) {
 
-                    this._getBase64Image(node.image, function(dataUrl) {
-                        node.base64 = dataUrl;
+                    this._getBase64Image(node.image, function(data) {
+                        node.base64 = data.dataURL;
+                        node.width = data.width;
+                        node.height = data.height;
 
                         var emptyItem = this.data.nodes.find(function(e) {
                             return e.base64 === undefined;
@@ -315,7 +323,15 @@
                         var name = this._nodeLabel(this.data, technique);
                         var image = this._nodeImageData(this.data, technique);
 
-                        doc.addImage(image, 'jpeg', j * columnWidth, y, columnWidth, 40);
+                        var imageHeightInMm = 20;
+
+                        var aspectRatio = image.width / image.height;
+
+                        var imageWidth = imageHeightInMm * aspectRatio;
+                        var imageHeight = imageHeightInMm;
+
+                        doc.addImage(image.base64, 'jpeg', j * columnWidth, y, imageWidth, imageHeight);
+
                     }
 
                     y += 40;
@@ -341,9 +357,9 @@
                     // the following code is needed to convert transparent background to white
 
                     var imgData = context.getImageData(0, 0, canvas.width, canvas.height);
-                    
+
                     var data = imgData.data;
-                    
+
                     for (var i = 0; i < data.length; i += 4) {
                         if (data[i + 3] < 255) {
                             data[i] = 255;
@@ -357,7 +373,11 @@
 
                     dataURL = canvas.toDataURL('image/jpeg');
 
-                    fn(dataURL);
+                    fn({
+                        dataURL: dataURL,
+                        width: img.width,
+                        height: img.height
+                    });
                 }
             }
 
