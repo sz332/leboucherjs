@@ -235,7 +235,12 @@
 
                 this._loadImages(
                     function() {
-                        var doc = new jsPDF();
+                        var doc = new jsPDF({
+                            orientation: 'l',
+                            unit: 'mm',
+                            format: 'a4',
+                            hotfixes: [] // an array of hotfix strings to enable
+                        });
 
                         //var pageHeight = Math.trunc(doc.internal.pageSize.height);
 
@@ -314,6 +319,9 @@
 
             _addPDFTableBody: function(doc, y, rows, columnWidth) {
 
+                var fontHeightInMm = 10;
+                var imageHeightInMm = 20;
+
                 for (var i = 0; i < rows.length; i++) {
                     var row = rows[i];
 
@@ -323,18 +331,28 @@
                         var name = this._nodeLabel(this.data, technique);
                         var image = this._nodeImageData(this.data, technique);
 
-                        var imageHeightInMm = 20;
-
                         var aspectRatio = image.width / image.height;
 
                         var imageWidth = imageHeightInMm * aspectRatio;
                         var imageHeight = imageHeightInMm;
 
-                        doc.addImage(image.base64, 'jpeg', j * columnWidth, y, imageWidth, imageHeight);
+                        if (imageWidth > columnWidth){
+                            imageHeight = imageHeight * columnWidth / imageWidth;
+                            imageWidth = columnWidth; 
+                        }
 
+                        var x = j * columnWidth + columnWidth / 2 - imageWidth / 2;
+
+                        doc.addImage(image.base64, 'jpeg', x, y, imageWidth, imageHeight);
+                        doc.text(name, x, y + imageHeight + 5);
                     }
 
-                    y += 40;
+                    y += 30;
+
+                    if ((y + imageHeightInMm + 5 +  fontHeightInMm) > Math.trunc(doc.internal.pageSize.height)){
+                        doc.addPage();
+                        y = 10;
+                    }
                 }
 
                 return y;
